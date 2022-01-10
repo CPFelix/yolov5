@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="31478875-f02a-497e-adf4-458cb6501b49" name="238-yolov5">
+        <fileTransfer rootFolder="/home/chenpengfei/yolov5" accessType="SFTP" host="192.168.2.238" port="22222" sshConfigId="e00c6439-d041-486b-80d4-a4c692c14a90" sshConfig="chenpengfei@192.168.2.238:22222 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
