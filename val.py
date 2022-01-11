@@ -251,8 +251,12 @@ def run(data,
     # Print speeds
     t = tuple(x / seen * 1E3 for x in (t0, t1, t2))  # speeds per image
     if not training:
-        shape = (batch_size, 3, imgsz, imgsz)
-        print(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {shape}' % t)
+        if (isinstance(imgsz, int)):
+            shape = (batch_size, 3, imgsz, imgsz)
+            print(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {shape}' % t)
+        else:
+            shape = (batch_size, 3, imgsz[1], imgsz[0])
+            print(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {shape}' % t)
 
     # Plots
     if plots:
