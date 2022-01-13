@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30f725cf-6551-4afd-adcb-a981b1d24708" name="Default Changelist" comment="输入尺寸可以为任意矩形">
+    <list default="true" id="30f725cf-6551-4afd-adcb-a981b1d24708" name="Default Changelist" comment="修复Rectangular Training矩形输入尺寸问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/val.py" beforeDir="false" afterPath="$PROJECT_DIR$/val.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/detect-labelme.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +39,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="57f9c852-42ba-4a3d-bb68-b40086bd806f" />
+  </component>
   <component name="ProjectId" id="1xRPrdVTpW9dEsgl0jBaf0yNwaF" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -57,12 +60,13 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/val.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/detect-labelme-labelimg.py" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.val">
-    <configuration name="detect-labelme" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.train">
+    <configuration name="detect-labelme-labelimg" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="yolov5" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -73,9 +77,8 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/detect-labelme.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/detect-labelme-labelimg.py" />
       <option name="PARAMETERS" value="--weights ./runs/train/exp/weights/best.pt --source /home/chenpengfei/dataset/test/0 --imgsz 320 --nosave" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -208,7 +211,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
-      <option name="PARAMETERS" value="--img 320 192 --batch 256 --epochs 100 --data ./data/DSMhand_smoke3.yaml --weights ./weights/yolov5s.pt --device 1,2,3,4" />
+      <option name="PARAMETERS" value="--img 320 192 --batch 256 --epochs 100 --data ./data/DSMhand_smoke3.yaml --weights ./weights/yolov5s.pt --device 1,2" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -284,7 +287,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.detect" />
-      <item itemvalue="Python.detect-labelme" />
+      <item itemvalue="Python.detect-labelme-labelimg" />
       <item itemvalue="Python.ensemble_yolov5s-trt_post-client" />
       <item itemvalue="Python.export" />
       <item itemvalue="Python.train" />
@@ -310,7 +313,8 @@
       <workItem from="1641533022059" duration="1397000" />
       <workItem from="1641535718626" duration="12281000" />
       <workItem from="1641775070325" duration="5753000" />
-      <workItem from="1641798934875" duration="10566000" />
+      <workItem from="1641798934875" duration="17851000" />
+      <workItem from="1641949603160" duration="20296000" />
     </task>
     <task id="LOCAL-00001" summary="yolov5个人使用">
       <created>1641797088722</created>
@@ -382,7 +386,21 @@
       <option name="project" value="LOCAL" />
       <updated>1641861792513</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="输入尺寸可以为任意矩形">
+      <created>1641862195446</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1641862195446</updated>
+    </task>
+    <task id="LOCAL-00012" summary="修复Rectangular Training矩形输入尺寸问题">
+      <created>1642070753761</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1642070753761</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -405,7 +423,8 @@
     <MESSAGE value="输入尺寸可为任意矩形" />
     <MESSAGE value="2022/1/10 输入尺寸可以为任意矩形" />
     <MESSAGE value="输入尺寸可以为任意矩形" />
-    <option name="LAST_COMMIT_MESSAGE" value="输入尺寸可以为任意矩形" />
+    <MESSAGE value="修复Rectangular Training矩形输入尺寸问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复Rectangular Training矩形输入尺寸问题" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -446,9 +465,29 @@
           <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/val.py</url>
+          <line>35</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/utils/augmentations.py</url>
+          <line>94</line>
+          <option name="timeStamp" value="93" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/utils/datasets.py</url>
-          <line>764</line>
-          <option name="timeStamp" value="65" />
+          <line>220</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/utils/datasets.py</url>
+          <line>266</line>
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/utils/datasets.py</url>
+          <line>470</line>
+          <option name="timeStamp" value="99" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -456,9 +495,9 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/yolov5$getDataset.coverage" NAME="getDataset Coverage Results" MODIFIED="1641525038611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/yolov5$detect_labelme.coverage" NAME="detect-labelme Coverage Results" MODIFIED="1641516772671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/yolov5$train.coverage" NAME="train Coverage Results" MODIFIED="1641813218442" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/yolov5$train.coverage" NAME="train Coverage Results" MODIFIED="1642070230929" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/yolov5$labelme_to_txt.coverage" NAME="labelme_to_txt Coverage Results" MODIFIED="1641538194417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/yolov5$detect.coverage" NAME="detect Coverage Results" MODIFIED="1641777884048" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/yolov5$val.coverage" NAME="val Coverage Results" MODIFIED="1641861741880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/yolov5$val.coverage" NAME="val Coverage Results" MODIFIED="1641861941454" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
