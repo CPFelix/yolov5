@@ -367,16 +367,19 @@ def img2label_paths(img_paths):
 class LoadImagesAndLabels(Dataset):  # for training/testing
     def __init__(self, path, img_size=640, batch_size=16, augment=False, hyp=None, rect=False, image_weights=False,
                  cache_images=False, single_cls=False, stride=32, pad=0.0, prefix=''):
-        self.img_size = img_size
+        if (isinstance(img_size, int)):
+            self.img_size = img_size
+        else:
+            self.img_size = [img_size[1], img_size[0]] # 初始传入参数按照W,H，从此处开始img_size按照H,W格式
         self.augment = augment
         self.hyp = hyp
         self.image_weights = image_weights
         self.rect = False if image_weights else rect
         self.mosaic = self.augment and not self.rect  # load 4 images at a time into a mosaic (only during training)
-        if (isinstance(img_size, int)):
-            self.mosaic_border = [-img_size // 2, -img_size // 2]
+        if (isinstance(self.img_size, int)):
+            self.mosaic_border = [-self.img_size // 2, -self.img_size // 2]
         else:
-            self.mosaic_border = [-img_size[1] // 2, -img_size[0] // 2]  # 注意按照[H, W]格式，否则random_perspective函数会出现异常。
+            self.mosaic_border = [-self.img_size[0] // 2, -self.img_size[1] // 2]  # 注意按照[H, W]格式，否则random_perspective函数会出现异常。
         self.stride = stride
         self.path = path
         self.albumentations = Albumentations() if augment else None
@@ -459,8 +462,13 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
                     shapes[i] = [maxi, 1]
                 elif mini > 1:
                     shapes[i] = [1, 1 / mini]
-
-            self.batch_shapes = np.ceil(np.array(shapes) * img_size / stride + pad).astype(np.int) * stride
+            # 修复矩形输入尺寸问题
+            if (isinstance(self.img_size, int)):
+                self.batch_shapes = np.ceil(np.array(shapes) * self.img_size / stride + pad).astype(np.int) * stride
+            else:
+                shapes_1 = [[1, 1]] * nb
+                self.batch_shapes = np.ceil(np.array(shapes_1) * np.array(self.img_size) / stride).astype(np.int) * stride
+            # print("OK")
 
         # Cache images into memory for faster training (WARNING: large datasets may exceed system RAM)
         self.imgs, self.img_npy = [None] * n, [None] * n
@@ -591,6 +599,17 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
             # Cutouts
             # labels = cutout(img, labels, p=0.5)
 
+        # 保存预处理后的图片及标注
+        # img4_draw = img.copy()
+        # for i in range(labels.shape[0]):
+        #     cv2.rectangle(img4_draw, (int((labels[i][1] - labels[i][3] / 2) * img4_draw.shape[1]), int((labels[i][2] - labels[i][4] / 2) * img4_draw.shape[0])), (int((labels[i][1] + labels[i][3] / 2) * img4_draw.shape[1]), int((labels[i][2] + labels[i][4] / 2) * img4_draw.shape[0])),
+        #                   (0, 0, 255), 2)
+        # imgname = "img_draw_" + str(random.randint(0, 10000)) + ".jpg"
+        # savePath = "/home/chenpengfei/temp/yolov5-320X192/"
+        # if not os.path.exists(savePath):
+        #     os.makedirs(savePath)
+        # cv2.imwrite(savePath + imgname, img4_draw)
+
         labels_out = torch.zeros((nl, 6))
         if nl:
             labels_out[:, 1:] = torch.from_numpy(labels)
@@ -655,7 +674,8 @@ def load_image(self, i):
                                 interpolation=cv2.INTER_AREA if r < 1 and not self.augment else cv2.INTER_LINEAR)
         else:
             r = max(self.img_size[0], self.img_size[1]) / max(h0, w0)  # ratio
-            im = cv2.resize(im, (self.img_size[0], self.img_size[1]),
+            # 使用的宽高
+            im = cv2.resize(im, (self.img_size[1], self.img_size[0]),
                             interpolation=cv2.INTER_AREA if r < 1 and not self.augment else cv2.INTER_LINEAR)
         return im, (h0, w0), im.shape[:2]  # im, hw_original, hw_resized
     else:
@@ -670,7 +690,7 @@ def load_mosaic(self, index):
     if (isinstance(s, int)):
         yc, xc = [int(random.uniform(-x, 2 * s + x)) for x in self.mosaic_border]  # mosaic center x, y
     else:
-        yc, _, _, xc = [int(random.uniform(-x, 2 * y + x)) for x in self.mosaic_border for y in [s[1], s[0]]]
+        yc, _, _, xc = [int(random.uniform(-x, 2 * y + x)) for x in self.mosaic_border for y in s]
         # xc = int(random.uniform(-self.mosaic_border[0], 2 * s[0] + self.mosaic_border[0]))
         # yc = int(random.uniform(-self.mosaic_border[1], 2 * s[1] + self.mosaic_border[1]))
     # print(yc, xc)
@@ -684,26 +704,26 @@ def load_mosaic(self, index):
             if (isinstance(s, int)):
                 img4 = np.full((s * 2, s * 2, img.shape[2]), 114, dtype=np.uint8)  # base image with 4 tiles
             else:
-                img4 = np.full((s[1] * 2, s[0] * 2, img.shape[2]), 114, dtype=np.uint8)  # base image with 4 tiles
+                img4 = np.full((s[0] * 2, s[1] * 2, img.shape[2]), 114, dtype=np.uint8)  # base image with 4 tiles
             x1a, y1a, x2a, y2a = max(xc - w, 0), max(yc - h, 0), xc, yc  # xmin, ymin, xmax, ymax (large image)
             x1b, y1b, x2b, y2b = w - (x2a - x1a), h - (y2a - y1a), w, h  # xmin, ymin, xmax, ymax (small image)
         elif i == 1:  # top right
             if (isinstance(s, int)):
                 x1a, y1a, x2a, y2a = xc, max(yc - h, 0), min(xc + w, s * 2), yc
             else:
-                x1a, y1a, x2a, y2a = xc, max(yc - h, 0), min(xc + w, s[0] * 2), yc
+                x1a, y1a, x2a, y2a = xc, max(yc - h, 0), min(xc + w, s[1] * 2), yc
             x1b, y1b, x2b, y2b = 0, h - (y2a - y1a), min(w, x2a - x1a), h
         elif i == 2:  # bottom left
             if (isinstance(s, int)):
                 x1a, y1a, x2a, y2a = max(xc - w, 0), yc, xc, min(s * 2, yc + h)
             else:
-                x1a, y1a, x2a, y2a = max(xc - w, 0), yc, xc, min(s[1] * 2, yc + h)
+                x1a, y1a, x2a, y2a = max(xc - w, 0), yc, xc, min(s[0] * 2, yc + h)
             x1b, y1b, x2b, y2b = w - (x2a - x1a), 0, w, min(y2a - y1a, h)
         elif i == 3:  # bottom right
             if (isinstance(s, int)):
                 x1a, y1a, x2a, y2a = xc, yc, min(xc + w, s * 2), min(s * 2, yc + h)
             else:
-                x1a, y1a, x2a, y2a = xc, yc, min(xc + w, s[0] * 2), min(s[1] * 2, yc + h)
+                x1a, y1a, x2a, y2a = xc, yc, min(xc + w, s[1] * 2), min(s[0] * 2, yc + h)
             x1b, y1b, x2b, y2b = 0, 0, min(w, x2a - x1a), min(y2a - y1a, h)
         # print("\n----------------------------\n")
         # print(i)
@@ -735,9 +755,9 @@ def load_mosaic(self, index):
         x_index = [1, 3]
         y_index = [2, 4]
         for x in (labels4[:, x_index], *segments4):
-            labels4[:, x_index] = np.clip(x, 0, 2 * s[0], out=x)  # clip when using random_perspective()
+            labels4[:, x_index] = np.clip(x, 0, 2 * s[1], out=x)  # clip when using random_perspective()
         for y in (labels4[:, y_index], *segments4):
-            labels4[:, y_index] = np.clip(y, 0, 2 * s[1], out=y)  # clip when using random_perspective()
+            labels4[:, y_index] = np.clip(y, 0, 2 * s[0], out=y)  # clip when using random_perspective()
     # img4, labels4 = replicate(img4, labels4)  # replicate
 
     # img4_draw = img4.copy()
@@ -760,7 +780,8 @@ def load_mosaic(self, index):
     # img4_draw = img4.copy()
     # for i in range(labels4.shape[0]):
     #     cv2.rectangle(img4_draw, (int(labels4[i][1]), int(labels4[i][2])), (int(labels4[i][3]), int(labels4[i][4])), (0, 0, 255), 2)
-    # cv2.imwrite("/home/chenpengfei/temp/img4_draw.jpg", img4_draw)
+    # imgname = "img4_draw_" + str(random.randint(0, 10000)) + ".jpg"
+    # cv2.imwrite("/home/chenpengfei/temp/yolov5/" + imgname, img4_draw)
 
     return img4, labels4
 
